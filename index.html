@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VETERINARIA BONILLA</title>
+    <style>
+        /* --- ESTILOS GENERALES Y DISEÑO BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        header { background: linear-gradient(135deg, #2c3e50, #00a896); color: white; padding: 20px 40px; display: flex; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header-info h1 { font-size: 34px; margin-bottom: 5px; letter-spacing: 1px; }
+        .header-info p { font-size: 14px; opacity: 0.8; }
+
+        nav { background-color: #34495e; display: flex; justify-content: center; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+        .nav-btn { background: none; border: none; color: #a6b0b7; padding: 15px 20px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+        .nav-btn:hover { color: white; background-color: #1abc9c; }
+        .nav-btn.active { color: white; background-color: #00a896; font-weight: bold; border-bottom: 3px solid white; }
+
+        .contenedor-flex {display: flex; justify-content: center; align-items: center; height: 150px;}
+
+        main { flex: 1; padding: 30px; max-width: 1400px; width: 100%; margin: 0 auto; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .inicio-container { text-align: center; max-width: 800px; margin: 50px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .inicio-container h2 { color: #2c3e50; font-size: 28px; margin-bottom: 20px; }
+        .inicio-container p { font-size: 16px; line-height: 1.8; color: #666; }
+
+        .grid-crud { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media (min-width: 1000px) { .grid-crud { grid-template-columns: 380px 1fr; } }
+
+        .form-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); height: fit-content; border-top: 4px solid #00a896; }
+        .form-card h3 { margin-bottom: 20px; color: #2c3e50; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600; color: #555; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        .form-group input:focus { border-color: #00a896; outline: none; }
+        
+        .btn-container { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { padding: 10px 15px; border: none; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; transition: background 0.2s; flex: 1; text-align: center; }
+        .btn-submit { background-color: #00a896; color: white; }
+        .btn-submit:hover { background-color: #028074; }
+        .btn-cancel { background-color: #e74c3c; color: white; display: none; }
+        .btn-cancel:hover { background-color: #c0392b; }
+
+        .data-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .search-box { margin-bottom: 20px; display: flex; gap: 10px; }
+        .search-box input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        
+        .table-responsive { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0; white-space: nowrap; }
+        th { background-color: #f8f9fa; color: #2c3e50; font-weight: 600; }
+        tr:hover { background-color: #f9fbfb; }
+
+        .btn-action { padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px; cursor: pointer; margin-right: 5px; color: white; font-weight: 600; }
+        .btn-edit { background-color: #3498db; }
+        .btn-edit:hover { background-color: #2980b9; }
+        .btn-delete { background-color: #e74c3c; }
+        .btn-delete:hover { background-color: #c0392b; }
+
+        footer { background-color: #2c3e50; color: #a6b0b7; padding: 20px; text-align: center; font-size: 14px; margin-top: auto; border-top: 3px solid #1abc9c; }
+        footer p { margin: 5px 0; }
+        footer a { color: #1abc9c; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-info">
+            <h1>VETERINARIA BONILLA</h1>
+        </div>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" onclick="switchView(event, 'inicio')">Inicio</button>
+        <button class="nav-btn" onclick="switchView(event, 'clientes')">Clientes</button>
+        <button class="nav-btn" onclick="switchView(event, 'mascotas')">Mascotas</button>
+        <button class="nav-btn" onclick="switchView(event, 'veterinarios')">Veterinarios</button>
+        <button class="nav-btn" onclick="switchView(event, 'diagnostico')">Diagnóstico y tratamiento</button>
+        <button class="nav-btn" onclick="switchView(event, 'registro-consulta')">Registro de consulta</button>
+        <button class="nav-btn" onclick="switchView(event, 'historial')">Historial del paciente</button>
+    </nav>
+
+    <div class="contenedor-flex">
+        <img src="vet.png" alt="Edificio de la veterinaria bonilla">
+    </div>
+
+    <main>
+
+        <section id="view-inicio" class="view-section active">
+            <div class="inicio-container">
+                <h2>DESCRIPCION DE MI NEGOCIO DE UN CONSULTORIO VETERINARIO</h2>
+                <p> Mi negocio veterinario es una empresa de servicios de salud y cuidado animal 
+                    cuyo propósito es preservar, promover y restaurar la salud y el bienestar de 
+                    los animales de compañía (especialmente perros y gatos).</p>
+            </div>
+        </section>
+
+        <section id="view-clientes" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-clientes">Agregar/Modificar Cliente</h3>
+                    <form id="form-clientes" onsubmit="handleSubmit(event, 'clientes')">
+                        <input type="hidden" id="mongo-id-clientes">
+                        <div class="form-group"><label>ID Cliente:</label><input type="text" id="id_cliente" required></div>
+                        <div class="form-group"><label>Nombre Cliente:</label><input type="text" id="nombre_cliente" required></div>
+                        <div class="form-group"><label>Teléfono:</label><input type="text" id="telefono_clientes" required></div>
+                        <div class="form-group"><label>Dirección:</label><input type="text" id="direccion" required></div>
+                        <div class="form-group"><label>Email:</label><input type="email" id="email" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-clientes">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-clientes" onclick="resetForm('clientes')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-clientes" placeholder="Buscar clientes..." onkeyup="filterTable('clientes')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Cliente</th><th>Nombre</th><th>Teléfono</th><th>Dirección</th><th>Email</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-clientes">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-mascotas" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-mascotas">Registrar Mascota</h3>
+                    <form id="form-mascotas" onsubmit="handleSubmit(event, 'mascotas')">
+                        <input type="hidden" id="mongo-id-mascotas">
+                        <div class="form-group"><label>ID Mascota:</label><input type="text" id="id_mascota" required></div>
+                        <div class="form-group"><label>Nombre Mascota:</label><input type="text" id="nombre_mascota" required></div>
+                        <div class="form-group"><label>Raza:</label><input type="text" id="raza" required></div>
+                        <div class="form-group"><label>Sexo:</label><input type="text" id="sexo" required></div>
+                        <div class="form-group"><label>Edad:</label><input type="text" id="edad" required></div>
+                        <div class="form-group"><label>Número Microchip:</label><input type="text" id="numero_microchip" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-mascotas">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-mascotas" onclick="resetForm('mascotas')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-mascotas" placeholder="Buscar mascotas..." onkeyup="filterTable('mascotas')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Mascota</th><th>Nombre</th><th>Raza</th><th>Sexo</th><th>Edad</th><th>Microchip</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-mascotas">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-veterinarios" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-veterinarios">Registrar Veterinario</h3>
+                    <form id="form-veterinarios" onsubmit="handleSubmit(event, 'veterinarios')">
+                        <input type="hidden" id="mongo-id-veterinarios">
+                        <div class="form-group"><label>ID Veterinario:</label><input type="text" id="id_veterinario" required></div>
+                        <div class="form-group"><label>Nombre:</label><input type="text" id="nombre" required></div>
+                        <div class="form-group"><label>Especialidad:</label><input type="text" id="especialidad" required></div>
+                        <div class="form-group"><label>Teléfono:</label><input type="text" id="telefono_veterinarios" required></div>
+                        <div class="form-group"><label>Consultorio:</label><input type="text" id="consultorio" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-veterinarios">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-veterinarios" onclick="resetForm('veterinarios')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-veterinarios" placeholder="Buscar personal médico..." onkeyup="filterTable('veterinarios')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Vet</th><th>Nombre</th><th>Especialidad</th><th>Teléfono</th><th>Consultorio</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-veterinarios">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-diagnostico" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-diagnostico">Diagnóstico y Tratamiento</h3>
+                    <form id="form-diagnostico" onsubmit="handleSubmit(event, 'Diagnostico_y_tratamiento')">
+                        <input type="hidden" id="mongo-id-diagnostico">
+                        <div class="form-group"><label>ID Mascota:</label><input type="text" id="id_Mascota_diag" required></div>
+                        <div class="form-group"><label>Diagnóstico:</label><input type="text" id="diagnostico" required></div>
+                        <div class="form-group"><label>Receta Médica:</label><input type="text" id="receta_medica" required></div>
+                        <div class="form-group"><label>Próxima Cita:</label><input type="text" id="proxima_cita" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-diagnostico">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-diagnostico" onclick="resetForm('diagnostico')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-diagnostico" placeholder="Buscar diagnósticos..." onkeyup="filterTable('diagnostico')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Mascota</th><th>Diagnóstico</th><th>Receta</th><th>Próxima Cita</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-diagnostico">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-registro-consulta" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-registro-consulta">Registro de Consulta</h3>
+                    <form id="form-registro-consulta" onsubmit="handleSubmit(event, 'Registro_de_consulta')">
+                        <input type="hidden" id="mongo-id-registro-consulta">
+                        <div class="form-group"><label>ID Mascota:</label><input type="text" id="id_mascota_con" required></div>
+                        <div class="form-group"><label>Motivo:</label><input type="text" id="motivo" required></div>
+                        <div class="form-group"><label>Anamnesis:</label><input type="text" id="anamnesis" required></div>
+                        <div class="form-group"><label>Hallazgos:</label><input type="text" id="hallazgos" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-registro-consulta">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-registro-consulta" onclick="resetForm('registro-consulta')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-registro-consulta" placeholder="Buscar consultas..." onkeyup="filterTable('registro-consulta')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Mascota</th><th>Motivo</th><th>Anamnesis</th><th>Hallazgos</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-registro-consulta">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-historial" class="view-section">
+            <div class="grid-crud">
+                <div class="form-card">
+                    <h3 id="title-historial">Historial del Paciente</h3>
+                    <form id="form-historial" onsubmit="handleSubmit(event, 'Historial_del_paciente')">
+                        <input type="hidden" id="mongo-id-historial">
+                        <div class="form-group"><label>ID Mascota:</label><input type="text" id="id_mascota_hist" required></div>
+                        <div class="form-group"><label>Peso Actual:</label><input type="text" id="peso_actual" required></div>
+                        <div class="form-group"><label>Vacunación:</label><input type="text" id="vacunacion" required></div>
+                        <div class="form-group"><label>Dieta:</label><input type="text" id="dieta" required></div>
+                        <div class="form-group"><label>Alergias Conocidas:</label><input type="text" id="alergias_conocidas" required></div>
+                        <div class="btn-container">
+                            <button type="submit" class="btn btn-submit" id="btn-save-historial">Guardar</button>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel-historial" onclick="resetForm('historial')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <div class="search-box"><input type="text" id="search-historial" placeholder="Buscar historiales..." onkeyup="filterTable('historial')"></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>ID Mascota</th><th>Peso</th><th>Vacunación</th><th>Dieta</th><th>Alergias</th><th>Acciones</th></tr></thead>
+                            <tbody id="tbody-historial">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Estudiante: Marco Andres Bonilla Murillo</p>
+        <p>Matricula: 24308051280809</p>
+        <p>Grado: 4to Semestre - Grupo 4J</p>
+        <p>Materia: Programación</p>
+    </footer>
+
+    <script>
+        // CORRECCIÓN: API_BASE dinámico — funciona en localhost Y en Project IDX/entornos en la nube
+        // En IDX, el navegador accede al servidor por el mismo host pero con el puerto del servidor.
+        // window.location.origin captura automáticamente el dominio/puerto correcto.
+        const API_BASE = window.location.origin;
+
+        // 1. Navegación entre las vistas
+        function switchView(event, viewId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            if(viewId !== 'inicio') cargarDatosColeccion(viewId === 'diagnostico' ? 'Diagnostico_y_tratamiento' : viewId === 'registro-consulta' ? 'Registro_de_consulta' : viewId === 'historial' ? 'Historial_del_paciente' : viewId);
+        }
+
+        // 2. Cargar datos dinámicamente desde MongoDB Atlas / Local
+        async function cargarDatosColeccion(coleccion) {
+            const shortName = coleccion === 'Diagnostico_y_tratamiento' ? 'diagnostico' : coleccion === 'Registro_de_consulta' ? 'registro-consulta' : coleccion === 'Historial_del_paciente' ? 'historial' : coleccion;
+            try {
+                const res = await fetch(`${API_BASE}/${coleccion}`);
+                const datos = await res.json();
+                const tbody = document.getElementById(`tbody-${shortName}`);
+                tbody.innerHTML = '';
+
+                datos.forEach(reg => {
+                    let filaHTML = '<tr>';
+                    if (coleccion === 'clientes') {
+                        filaHTML += `<td>${reg.id_cliente}</td><td>${reg.nombre_cliente}</td><td>${reg.telefono}</td><td>${reg.direccion}</td><td>${reg.email}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionClientes('${reg._id}','${reg.id_cliente}','${reg.nombre_cliente}','${reg.telefono}','${reg.direccion}','${reg.email}')">Editar</button>`;
+                    } else if (coleccion === 'mascotas') {
+                        filaHTML += `<td>${reg.id_mascota}</td><td>${reg.nombre_mascota}</td><td>${reg.raza}</td><td>${reg.sexo}</td><td>${reg.edad}</td><td>${reg.numero_microchip}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionMascotas('${reg._id}','${reg.id_mascota}','${reg.nombre_mascota}','${reg.raza}','${reg.sexo}','${reg.edad}','${reg.numero_microchip}')">Editar</button>`;
+                    } else if (coleccion === 'veterinarios') {
+                        filaHTML += `<td>${reg.id_veterinario}</td><td>${reg.nombre}</td><td>${reg.especialidad}</td><td>${reg.telefono}</td><td>${reg.consultorio}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionVeterinarios('${reg._id}','${reg.id_veterinario}','${reg.nombre}','${reg.especialidad}','${reg.telefono}','${reg.consultorio}')">Editar</button>`;
+                    } else if (coleccion === 'Diagnostico_y_tratamiento') {
+                        filaHTML += `<td>${reg.id_Mascota}</td><td>${reg.diagnostico}</td><td>${reg.receta_medica}</td><td>${reg.proxima_cita}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionDiag('${reg._id}','${reg.id_Mascota}','${reg.diagnostico}','${reg.receta_medica}','${reg.proxima_cita}')">Editar</button>`;
+                    } else if (coleccion === 'Registro_de_consulta') {
+                        filaHTML += `<td>${reg.id_mascota}</td><td>${reg.motivo}</td><td>${reg.anamnesis}</td><td>${reg.hallazgos}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionCons('${reg._id}','${reg.id_mascota}','${reg.motivo}','${reg.anamnesis}','${reg.hallazgos}')">Editar</button>`;
+                    } else if (coleccion === 'Historial_del_paciente') {
+                        filaHTML += `<td>${reg.id_mascota}</td><td>${reg.peso_actual || reg['peso actual']}</td><td>${reg.vacunacion}</td><td>${reg.dieta}</td><td>${reg.alergias_conocidas}</td>`;
+                        filaHTML += `<td><button class="btn-action btn-edit" onclick="prepararEdicionHist('${reg._id}','${reg.id_mascota}','${reg.peso_actual || reg['peso actual']}','${reg.vacunacion}','${reg.dieta}','${reg.alergias_conocidas}')">Editar</button>`;
+                    }
+                    filaHTML += `<button class="btn-action btn-delete" onclick="eliminarRegistro('${coleccion}','${reg._id}')">Borrar</button></td></tr>`;
+                    tbody.innerHTML += filaHTML;
+                });
+            } catch (err) { console.error("Error al cargar datos:", err); }
+        }
+
+        // 3. Procesar Formularios (Agregar y Actualizar - POST y PUT)
+        async function handleSubmit(e, coleccion) {
+            e.preventDefault();
+            const shortName = coleccion === 'Diagnostico_y_tratamiento' ? 'diagnostico' : coleccion === 'Registro_de_consulta' ? 'registro-consulta' : coleccion === 'Historial_del_paciente' ? 'historial' : coleccion;
+            const mongoId = document.getElementById(`mongo-id-${shortName}`).value;
+            
+            let cuerpo = {};
+            if(coleccion === 'clientes') {
+                cuerpo = { id_cliente: document.getElementById('id_cliente').value, nombre_cliente: document.getElementById('nombre_cliente').value, telefono: document.getElementById('telefono_clientes').value, direccion: document.getElementById('direccion').value, email: document.getElementById('email').value };
+            } else if(coleccion === 'mascotas') {
+                cuerpo = { id_mascota: document.getElementById('id_mascota').value, nombre_mascota: document.getElementById('nombre_mascota').value, raza: document.getElementById('raza').value, sexo: document.getElementById('sexo').value, edad: document.getElementById('edad').value, numero_microchip: document.getElementById('numero_microchip').value };
+            } else if(coleccion === 'veterinarios') {
+                cuerpo = { id_veterinario: document.getElementById('id_veterinario').value, nombre: document.getElementById('nombre').value, especialidad: document.getElementById('especialidad').value, telefono: document.getElementById('telefono_veterinarios').value, consultorio: document.getElementById('consultorio').value };
+            } else if(coleccion === 'Diagnostico_y_tratamiento') {
+                cuerpo = { id_Mascota: document.getElementById('id_Mascota_diag').value, diagnostico: document.getElementById('diagnostico').value, receta_medica: document.getElementById('receta_medica').value, proxima_cita: document.getElementById('proxima_cita').value };
+            } else if(coleccion === 'Registro_de_consulta') {
+                cuerpo = { id_mascota: document.getElementById('id_mascota_con').value, motivo: document.getElementById('motivo').value, anamnesis: document.getElementById('anamnesis').value, hallazgos: document.getElementById('hallazgos').value };
+            } else if(coleccion === 'Historial_del_paciente') {
+                cuerpo = { id_mascota: document.getElementById('id_mascota_hist').value, "peso actual": document.getElementById('peso_actual').value, vacunacion: document.getElementById('vacunacion').value, dieta: document.getElementById('dieta').value, alergias_conocidas: document.getElementById('alergias_conocidas').value };
+            }
+
+            const url = mongoId ? `${API_BASE}/${coleccion}/${mongoId}` : `${API_BASE}/${coleccion}`;
+            const metodo = mongoId ? 'PUT' : 'POST';
+
+            await fetch(url, { method: metodo, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) });
+            resetForm(shortName);
+            cargarDatosColeccion(coleccion);
+        }
+
+        // 4. Funciones de mapeo para rellenar formularios al dar "Editar"
+        function prepararEdicionClientes(mId, id, nom, tel, dir, em) {
+            document.getElementById('mongo-id-clientes').value = mId; document.getElementById('id_cliente').value = id; document.getElementById('nombre_cliente').value = nom; document.getElementById('telefono_clientes').value = tel; document.getElementById('direccion').value = dir; document.getElementById('email').value = em;
+            activarModoEdicion('clientes');
+        }
+        function prepararEdicionMascotas(mId, id, nom, rz, sx, ed, mc) {
+            document.getElementById('mongo-id-mascotas').value = mId; document.getElementById('id_mascota').value = id; document.getElementById('nombre_mascota').value = nom; document.getElementById('raza').value = rz; document.getElementById('sexo').value = sx; document.getElementById('edad').value = ed; document.getElementById('numero_microchip').value = mc;
+            activarModoEdicion('mascotas');
+        }
+        function prepararEdicionVeterinarios(mId, id, nom, esp, tel, cons) {
+            document.getElementById('mongo-id-veterinarios').value = mId; document.getElementById('id_veterinario').value = id; document.getElementById('nombre').value = nom; document.getElementById('especialidad').value = esp; document.getElementById('telefono_veterinarios').value = tel; document.getElementById('consultorio').value = cons;
+            activarModoEdicion('veterinarios');
+        }
+        function prepararEdicionDiag(mId, id, diag, rec, prox) {
+            document.getElementById('mongo-id-diagnostico').value = mId; document.getElementById('id_Mascota_diag').value = id; document.getElementById('diagnostico').value = diag; document.getElementById('receta_medica').value = rec; document.getElementById('proxima_cita').value = prox;
+            activarModoEdicion('diagnostico');
+        }
+        function prepararEdicionCons(mId, id, mot, anam, hall) {
+            document.getElementById('mongo-id-registro-consulta').value = mId; document.getElementById('id_mascota_con').value = id; document.getElementById('motivo').value = mot; document.getElementById('anamnesis').value = anam; document.getElementById('hallazgos').value = hall;
+            activarModoEdicion('registro-consulta');
+        }
+        function prepararEdicionHist(mId, id, peso, vac, diet, aler) {
+            document.getElementById('mongo-id-historial').value = mId; document.getElementById('id_mascota_hist').value = id; document.getElementById('peso_actual').value = peso; document.getElementById('vacunacion').value = vac; document.getElementById('dieta').value = diet; document.getElementById('alergias_conocidas').value = aler;
+            activarModoEdicion('historial');
+        }
+
+        function activarModoEdicion(shortName) {
+            document.getElementById(`title-${shortName}`).innerText = 'Actualizar Registro';
+            document.getElementById(`btn-cancel-${shortName}`).style.display = 'inline-block';
+        }
+
+        // 5. Eliminar Registro (DELETE)
+        async function eliminarRegistro(coleccion, id) {
+            if (confirm('¿Estás seguro de eliminar de forma permanente este registro en MongoDB?')) {
+                await fetch(`${API_BASE}/${coleccion}/${id}`, { method: 'DELETE' });
+                cargarDatosColeccion(coleccion);
+            }
+        }
+
+        // 6. Buscador por coincidencia en filas
+        function filterTable(shortName) {
+            const filter = document.getElementById(`search-${shortName}`).value.toLowerCase();
+            const rows = document.getElementById(`tbody-${shortName}`).getElementsByTagName('tr');
+            for (let row of rows) {
+                let match = false;
+                for (let cell of row.getElementsByTagName('td')) {
+                    if (cell.innerText.toLowerCase().includes(filter)) { match = true; break; }
+                }
+                row.style.display = match ? "" : "none";
+            }
+        }
+
+        function resetForm(shortName) {
+            document.getElementById(`form-${shortName}`).reset();
+            document.getElementById(`mongo-id-${shortName}`).value = '';
+            document.getElementById(`title-${shortName}`).innerText = 'Agregar Registro';
+            document.getElementById(`btn-cancel-${shortName}`).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
