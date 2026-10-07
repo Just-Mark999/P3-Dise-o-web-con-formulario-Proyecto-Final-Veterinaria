@@ -1,20 +1,24 @@
-<!DOCTYPE hmtl>
-<html>
+<!-- Marco Andres Bonilla Murillo 5J -->
+<!DOCTYPE hmtl> <!-- Etiqueta que define el docuemnto como html -->
+<html> <!-- Raiz que contiene toda la informacion del docuemnto html -->
+	<!-- Seccion de informacion de configuracion no visible en el docuemnto -->
 	<head>
-		<meta charset="UTF-8">
-		<title> Sitio web celulares </title>
+		<meta charset="UTF-8"> <!-- Etiqueta que permite utilizar caracteres especiales -->
+		<title> Sitio web celulares </title> <!-- Etiqueta que contiene el titulo de la barra de navegacion -->
 	</head>
-
+	<!-- Seccion de informacion visible en el documento html -->
 	<body>
-		<h2> <strong>TIENDA DE CELULARES Iphone</strong> </h2>
-		<nav style="display: flex; gap: 15px;">
-			<a href="index.html"> Inicio </a>
-			<a href="celulares e1.html"> Celulares E1 </a>
-			<a href="celulares e2.html"> Celulares E2 </a>
-			<a href="celulares e3.html"> Celulares E3 </a>
-			<a href="celulares e4.html"> Celulares E4 </a>
-			<a href="celulares e5.html"> Celulares E5 </a>
+		<h2> <strong>TIENDA DE CELULARES Iphone</strong> </h2> <!-- Titulo de nivel 2 -->
+		<!-- Seccion de navegacion para seleccionar el documento que se desea vizualizar -->
+		<nav style="display: flex; gap: 15px;"> <!-- Division entre los vinculos de 15 pixeles en acomodo flex -->
+			<a href="index.html"> Inicio </a> <!-- Vinculo a la apgina de inicio -->
+			<a href="celulares e1.html"> Celulares E1 </a> <!-- Vinculo a la pagina de la primer era de celulares -->
+			<a href="celulares e2.html"> Celulares E2 </a> <!-- Vinculo a la pagina de la segunda era de celulares -->
+			<a href="celulares e3.html"> Celulares E3 </a> <!-- Vinculo a la pagina de la tercera era de celulares -->
+			<a href="celulares e4.html"> Celulares E4 </a> <!-- Vinculo a la pagina de la cuarta era de celulares -->
+			<a href="celulares e5.html"> Celulares E5 </a> <!-- Vinculo a la pagina de la quinta era de celulares -->
 		</nav>
+		<!-- Seccion que contiene informacion de la seccion correspondiente a los celulares -->
 		<div>
 		  <p> Bienvenido a la seccion de Celulares! 
 		  	  Contamos con los 40 modelos de Iphone
@@ -26,8 +30,10 @@
 		  </p>
 		  <h2>ERA USB-C e INTEGRACION DE IA (2023-PRESENTE) - CANTIDAD DE MODELOS> 7</h2>
 		</div>
-		<div style="display: flex; gap: 15px;">
+		<!-- Seccion de la tabla que muestra todos los productos -->
+		<div style="display: flex; gap: 15px;"> <!-- Estilo de division entre la tabla y el formulario usando flex con una separacion de 15 pixeles -->
 			<table border="1" style="text-align: center;">
+				<!-- Creacion de la tabla con borde de 1 y con el estilo de su texto alineado -->
 				<thead>
 					<tr>
 						<th style="width:200;">Modelo</th>
@@ -37,14 +43,15 @@
 						<th style="width:200;">Imagen</th>
 					</tr>
 				</thead>
+				<!-- Seccion de la filas de la tabla -->
 				<tbody>
 					<!-- Fila 1/7 -->
 					<tr>
-						<td>iPhone 15 / 15 Plus </td>
-						<td>22 de septiembre de 2023 </td>
-						<td>15: $799 / Plus: $899 </td>
-						<td>Chip A16 Bionic, USB-C, Isla Dinámica, Cámara principal 48 MP con zoom 2x. </td>
-						<td><img src="img1d.png" width="100" height="150"></td>
+						<td>iPhone 15 / 15 Plus </td> <!-- Etiqueta que define el nombre del modelo del telefono -->
+						<td>22 de septiembre de 2023 </td> <!-- Etiqueta que muestra la fecha de salida del modelo del telefono -->
+						<td>15: $799 / Plus: $899 </td> <!-- Etiqueta que muestra el costo inicial del modelo del telefono en EEUU -->
+						<td>Chip A16 Bionic, USB-C, Isla Dinámica, Cámara principal 48 MP con zoom 2x. </td> <!-- Etiqueta que muestra el costo inicial del modelo del telefono en EEUU -->
+						<td><img src="img1d.png" width="100" height="150"></td> <!-- Etiqueta con imagen que muestra el modelo del telefono -->
 					</tr>
 					<!-- Fila 2/7 -->
 					<tr>
@@ -96,21 +103,23 @@
 					</tr>
 				</tbody>
 			</table>
-			<form action="" method="post">
-				<h2> DATOS DE CONTACTO: </h2>
-				<p> Ingresa tu nombre </p>
-				<input type="Text" name="nombre" size="20">
+			<!-- Seccion que contiene el formualrio de datos de contacto -->
+			<form action="" method="post"> <!-- Razi que guarda y envia los datos en los campos del formulario -->
+				<h2> DATOS DE CONTACTO: </h2> <!-- Titulo de nivel 2 -->
+				<p> Ingresa tu nombre </p> <!-- Parrafo de texto con instruccion -->
+				<input type="Text" name="nombre" size="20"> <!-- Input del tipo texto encargado de guardar el nombre del usuario -->
 				<br>
-				<p> Ingresa tu correo electronico </p>
-				<input type="email" name="correo">
+				<p> Ingresa tu correo electronico </p> <!-- Parrafo de instruccion -->
+				<input type="email" name="correo"> <!-- Input del tipo email para almacenar el correo electronico del usuario -->
 				<br>
-				<p> Ingresa tu numero telefonico <br> Formato (ejemplo): 656-102-7136</p>
-				<input type="tel" name="num telefonico" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"> 
+				<p> Ingresa tu numero telefonico <br> Formato (ejemplo): 656-102-7136</p> <!-- Parrafo de instrucciones -->
+				<input type="tel" name="num telefonico" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"> <!-- Input del tipo tel encargado de almacenar el numero telefonico del usuario --> 
 				<br>
-				<input type="submit" value="enviar">
-				<input type="reset" value="borrar">
+				<input type="submit" value="enviar"> <!-- Input del tipo submit que cera un boton para enviar los datos del formulario -->
+				<input type="reset" value="borrar"> <!-- Input del tipo reset que se enacrga de eliminar el contenido del formulario -->
 			</form>
 		</div>
+		<!-- Etiqueta con el footer de la pagina web -->
 		<footer style="text-align: center;"><strong>Marco Andres Bonilla Murillo 5j</strong></footer>
 	</body>
 </html>
