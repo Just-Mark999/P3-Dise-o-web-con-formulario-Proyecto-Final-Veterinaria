@@ -1,0 +1,85 @@
+/* ===== estilos.css: hoja de estilos compartida por todos los documentos ===== */
+
+/* Variables CSS (custom properties): se declaran una vez y se reutilizan */
+:root {
+  --negro: #000;          /* color predominante */
+  --gris-oscuro: #111;    /* fondo de tarjetas */
+  --gris-borde: #333;     /* bordes discretos */
+  --gris-texto: #bbb;     /* texto secundario */
+  --blanco: #fff;         /* complemento */
+}
+
+/* Reinicio basico: box-sizing hace que padding y borde cuenten dentro del ancho */
+* { box-sizing: border-box; }
+
+/* Fuente principal: Arial 14 con texto justificado */
+body {
+  margin: 0;
+  background: var(--negro);
+  color: var(--blanco);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* Contenedor central que limita el ancho del contenido */
+main, .contenedor { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+
+/* ----- Encabezado con logo de Apple ----- */
+.encabezado { display: flex; align-items: center; gap: 12px; padding: 20px 20px 8px; max-width: 1200px; margin: 0 auto; }
+.logo-apple { width: 34px; height: 34px; fill: var(--blanco); } /* fill pinta el SVG */
+.encabezado h1 { margin: 0; font-size: 24px; text-align: left; }
+
+/* ----- Barra de navegacion ----- */
+nav { background: var(--negro); border-top: 1px solid var(--gris-borde); border-bottom: 1px solid var(--gris-borde); }
+nav .enlaces { display: flex; flex-wrap: wrap; gap: 8px; max-width: 1200px; margin: 0 auto; padding: 10px 20px; }
+nav a { color: var(--blanco); text-decoration: none; padding: 6px 14px; border-radius: 6px; transition: text-shadow .2s, box-shadow .2s; }
+/* Efecto de brillo: se activa con :hover (raton encima) y :focus-visible (teclado) */
+nav a:hover, nav a:focus-visible {
+  text-shadow: 0 0 8px #fff, 0 0 16px #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,.7);
+  outline: none;
+}
+nav a.activo { border-bottom: 2px solid var(--blanco); border-radius: 6px 6px 0 0; } /* pagina actual */
+
+/* ----- Textos ----- */
+h2 { font-size: 20px; text-align: left; }
+h3 { text-align: left; }
+.intro { max-width: 900px; color: var(--gris-texto); }
+.hero-img { display: block; max-width: 100%; height: auto; border: 1px solid var(--gris-borde); border-radius: 12px; margin-top: 16px; }
+
+/* ----- Tarjetas de producto (reemplazan las tablas) ----- */
+/* CSS Grid: crea columnas automaticas de minimo 240px que se adaptan al ancho */
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-top: 20px; }
+.tarjeta { display: flex; flex-direction: column; background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 16px; }
+.tarjeta img { align-self: center; width: 100px; height: 150px; object-fit: contain; margin-bottom: 12px; }
+.tarjeta h3 { margin: 0 0 8px; font-size: 16px; }
+.tarjeta p { margin: 4px 0; }
+.tarjeta .etiqueta { color: var(--gris-texto); }
+.tarjeta .specs { flex: 1; } /* flex:1 empuja el boton al fondo de la tarjeta */
+
+/* Boton de compra inhabilitado (atributo disabled en el HTML) */
+.btn-comprar { margin-top: 12px; padding: 10px; font: inherit; font-weight: bold; border: 1px solid var(--blanco); border-radius: 8px; background: var(--blanco); color: var(--negro); }
+.btn-comprar:disabled { background: transparent; color: #777; border-color: #555; cursor: not-allowed; }
+
+/* ----- Formularios (pagina de contacto) ----- */
+.caja-form { max-width: 460px; margin: 0 auto; background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 24px; }
+.pestanas { display: flex; gap: 8px; margin-bottom: 16px; }
+.pestana, .btn { font: inherit; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--blanco); background: transparent; color: var(--blanco); cursor: pointer; }
+.pestana { flex: 1; }
+.pestana.activa, .btn.principal { background: var(--blanco); color: var(--negro); font-weight: bold; }
+label { display: block; margin-top: 12px; }
+input { width: 100%; margin-top: 4px; padding: 10px; font: inherit; color: var(--blanco); background: var(--negro); border: 1px solid #666; border-radius: 6px; }
+input:focus { outline: 2px solid var(--blanco); }
+.acciones { display: flex; gap: 10px; margin-top: 18px; }
+.mensaje { margin-top: 12px; min-height: 1.4em; color: var(--gris-texto); }
+.oculto { display: none; } /* clase que JavaScript agrega o quita para mostrar/ocultar formularios */
+
+/* ----- Footer ----- */
+footer { border-top: 1px solid var(--gris-borde); margin-top: 32px; padding: 24px 20px; text-align: center; color: var(--gris-texto); }
+footer p { margin: 4px 0; text-align: center; }
+footer .nombre { color: var(--blanco); font-weight: bold; }
+
+/* Accesibilidad: respeta a quien desactiva las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

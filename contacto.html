@@ -1,0 +1,100 @@
+<!-- Marco Andres Bonilla Murillo 5J -->
+<!DOCTYPE html> <!-- Declaracion del tipo de documento (HTML5) -->
+<html lang="es"> <!-- Raiz del documento; lang indica el idioma -->
+<head>
+	<meta charset="UTF-8"> <!-- Permite acentos y caracteres especiales -->
+	<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Adapta la pagina a pantallas de celular -->
+	<title>Contacto | Tienda de celulares iPhone</title>
+	<link rel="stylesheet" href="estilos.css"> <!-- Vincula la hoja de estilos compartida -->
+</head>
+<body>
+	<!-- Encabezado con el logo de Apple -->
+	<header class="encabezado">
+		<svg class="logo-apple" viewBox="0 0 24 24" role="img" aria-label="Logo de Apple"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+		<h1>TIENDA DE CELULARES iPhone</h1>
+	</header>
+	<!-- Barra de navegacion con enlaces a todos los documentos -->
+	<nav>
+		<div class="enlaces">
+			<a href="index.html">Inicio</a>
+			<a href="celulares e1.html">Celulares E1</a>
+			<a href="celulares e2.html">Celulares E2</a>
+			<a href="celulares e3.html">Celulares E3</a>
+			<a href="celulares e4.html">Celulares E4</a>
+			<a href="celulares e5.html">Celulares E5</a>
+			<a href="contacto.html" class="activo">Contacto</a>
+		</div>
+	</nav>
+	<main>
+		<h2>Contacto</h2>
+		<div class="caja-form">
+			<!-- Pestanas: cada boton muestra un formulario distinto -->
+			<div class="pestanas">
+				<button type="button" class="pestana activa" id="tab-login">Ya tengo cuenta</button>
+				<button type="button" class="pestana" id="tab-registro">Crear cuenta</button>
+			</div>
+
+			<!-- Formulario 1: inicio de sesion para usuarios registrados -->
+			<form id="form-login" action="" method="post">
+				<h3>Iniciar sesion</h3>
+				<label>Correo electronico <input type="email" name="correo" required></label>
+				<label>Contrasena <input type="password" name="contrasena" required></label>
+				<div class="acciones">
+					<input class="btn principal" type="submit" value="Entrar">
+					<input class="btn" type="reset" value="Borrar">
+				</div>
+			</form>
+
+			<!-- Formulario 2: registro para usuarios nuevos (oculto al inicio con la clase "oculto") -->
+			<form id="form-registro" class="oculto" action="" method="post">
+				<h3>Crear cuenta</h3>
+				<label>Nombre <input type="text" name="nombre" size="20" required></label>
+				<label>Correo electronico <input type="email" name="correo" required></label>
+				<label>Numero telefonico (ejemplo: 656-102-7136)
+					<!-- pattern: expresion regular que valida el formato 000-000-0000 -->
+					<input type="tel" name="num telefonico" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></label>
+				<label>Contrasena (minimo 8 caracteres) <input type="password" name="contrasena" id="pass1" minlength="8" required></label>
+				<label>Confirmar contrasena <input type="password" id="pass2" minlength="8" required></label>
+				<p class="mensaje" id="mensaje" role="alert"></p>
+				<div class="acciones">
+					<input class="btn principal" type="submit" value="Registrarme">
+					<input class="btn" type="reset" value="Borrar">
+				</div>
+			</form>
+		</div>
+	</main>
+	<script>
+		// Referencias a los elementos del DOM que vamos a usar
+		const tabLogin = document.getElementById("tab-login");
+		const tabRegistro = document.getElementById("tab-registro");
+		const formLogin = document.getElementById("form-login");
+		const formRegistro = document.getElementById("form-registro");
+
+		// Funcion que muestra un formulario y oculta el otro con classList.toggle
+		function mostrar(registro) {
+			formLogin.classList.toggle("oculto", registro);
+			formRegistro.classList.toggle("oculto", !registro);
+			tabLogin.classList.toggle("activa", !registro);
+			tabRegistro.classList.toggle("activa", registro);
+		}
+		// Eventos click de cada pestana
+		tabLogin.addEventListener("click", () => mostrar(false));
+		tabRegistro.addEventListener("click", () => mostrar(true));
+
+		// Validacion: las dos contrasenas deben coincidir antes de enviar el registro
+		formRegistro.addEventListener("submit", (e) => {
+			if (document.getElementById("pass1").value !== document.getElementById("pass2").value) {
+				e.preventDefault(); // cancela el envio del formulario
+				document.getElementById("mensaje").textContent = "Las contrasenas no coinciden.";
+			}
+		});
+	</script>
+	<!-- Footer: datos de la pagina, la marca y el autor -->
+	<footer>
+		<p>Tienda de celulares iPhone: catalogo informativo de los 40 modelos de iPhone lanzados desde 2007.</p>
+		<p>iPhone, Apple y el logo de Apple son marcas registradas de Apple Inc. Precios en dolares (EE.UU.) al lanzamiento.</p>
+		<p>Proyecto escolar de HTML y CSS, sin fines comerciales.</p>
+		<p class="nombre">Marco Andres Bonilla Murillo 24308051280809</p>
+	</footer>
+</body>
+</html>
